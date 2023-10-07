@@ -7,7 +7,6 @@ const swaggerConfig = swagger({
   path: "/v1/swagger",
 });
 const schema = {
- 
   query: t.Object({
     q: t.String(),
   }),
@@ -18,72 +17,70 @@ const app = new Elysia()
   .use(setup)
   .get("/", async ({ query, db }) => db.movie.findMany())
   .group("/search", (app) => {
-    return app
-      .guard(
-        {
-          query: t.Object({
-            q: t.String(),
-          }),
-        },
-        (app) =>
-          app
-            .get("/movie", async ({ query, db }) => {
-              return db.movie.findMany({
-                where: {
-                  title: {
-                    contains: query.q,
-                  },
+    return app.guard(
+      {
+        query: t.Object({
+          q: t.String(),
+        }),
+      },
+      (app) =>
+        app
+          .get("/movie", async ({ query, db }) => {
+            return db.movie.findMany({
+              where: {
+                title: {
+                  contains: query.q,
                 },
-              });
-            })
-            .get("/tv", async ({ query, db }) => {
-              return db.movie.findMany({
-                where: {
-                  title: {
-                    contains: query.q,
-                  },
-                  type: "series",
+              },
+            });
+          })
+          .get("/tv", async ({ query, db }) => {
+            return db.movie.findMany({
+              where: {
+                title: {
+                  contains: query.q,
                 },
-              });
-            })
-            .get("/person", async ({ query, db }) => {
-              return db.person.findMany({
-                where: {
-                  name: {
-                    contains: query.q,
-                  },
+                type: "series",
+              },
+            });
+          })
+          .get("/person", async ({ query, db }) => {
+            return db.person.findMany({
+              where: {
+                name: {
+                  contains: query.q,
                 },
-              });
-            })
-            // .get("/company", ({ query }) => `query: ${query.q}`)
-            .get("/episode", async ({ query, db }) => {
-              return db.episode.findMany({
-                where: {
-                  title: {
-                    contains: query.q,
-                  },
+              },
+            });
+          })
+          .get("/episode", async ({ query, db }) => {
+            return db.episode.findMany({
+              where: {
+                title: {
+                  contains: query.q,
                 },
-              });
-            })
-            .get("/review", async ({ query, db }) => {
-              return db.review.findMany({
-                where: {
-                  comment: {
-                    contains: query.q,
-                  },
+              },
+            });
+          })
+          .get("/review", async ({ query, db }) => {
+            return db.review.findMany({
+              where: {
+                comment: {
+                  contains: query.q,
                 },
-              });
-            })
-            .get("/award", async ({ query, db }) => {
-              return db.award.findMany({
-                where: {
-                  name: {
-                    contains: query.q,
-                  },
+              },
+            });
+          })
+          .get("/award", async ({ query, db }) => {
+            return db.award.findMany({
+              where: {
+                name: {
+                  contains: query.q,
                 },
-              });
-            })
-      );
+              },
+            });
+          })
+    );
   })
   .group("/title/:id", (app) => {
     return (
