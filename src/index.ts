@@ -12,7 +12,7 @@ const schema = {
   }),
 };
 const app = new Elysia()
-  // 🎬 Movie API routes 🎬
+
   .use(swaggerConfig)
   .use(setup)
   .group("/auth", (app) => {
